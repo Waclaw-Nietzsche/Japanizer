@@ -3,9 +3,9 @@ import settings as st
 game_text_map = \
     [
         'BBBBBBBB',
+        'B..B...B',
         'B......B',
-        'B......B',
-        'B......B',
+        'B....B.B',
         'B......B',
         'BBBBBBBB',
     ]
