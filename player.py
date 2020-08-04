@@ -10,6 +10,7 @@ class Player:
     def position(self):
         return (self.x, self.y)
 
+    # Движение персонажа
     def movement(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_w]:
