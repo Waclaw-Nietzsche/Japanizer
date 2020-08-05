@@ -4,8 +4,8 @@ game_text_map = \
     [
         'BBBBBBBBBBBB',
         'B.B.....B..B',
-        'B....B.....B',
-        'B.B..B..B..B',
+        'B....B.B...B',
+        'B.B.....B..B',
         'B....B.B...B',
         'BBBBBBBBBBBB',
     ]
