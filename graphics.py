@@ -13,12 +13,17 @@ class Draw:
         self.textures = \
             {
             '1': pg.image.load('textures/wood.png').convert(),
-            '2': pg.image.load('textures/floor.png').convert()
+            '2': pg.image.load('textures/floor.png').convert(),
+            'S': pg.image.load('textures/sky.png').convert()
             }
 
-    def background(self):
+    def background(self, angle):
         # Отрисовка "Неба и Земли"
-        pg.draw.rect(self.screen, st.SKYBLUE, (0, 0, st.WINDOW_WIDTH, st.HALF_WINDOW_HEIGHT))
+        #pg.draw.rect(self.screen, st.SKYBLUE, (0, 0, st.WINDOW_WIDTH, st.HALF_WINDOW_HEIGHT))
+        sky_offset = -5 * math.degrees(angle) % st.WINDOW_WIDTH
+        self.screen.blit(self.textures['S'], (sky_offset, 0))
+        self.screen.blit(self.textures['S'], (sky_offset - st.WINDOW_WIDTH, 0))
+        self.screen.blit(self.textures['S'], (sky_offset + st.WINDOW_WIDTH, 0))
         pg.draw.rect(self.screen, st.DARKGRAY, (0, st.HALF_WINDOW_HEIGHT, st.WINDOW_WIDTH, st.HALF_WINDOW_HEIGHT))
 
     def world(self, player_position, player_angle):
@@ -32,11 +37,12 @@ class Draw:
     def minimap(self, player):
         self.minimap_screen.fill(st.BLACK)
         map_x, map_y = player.x // st.MINIMAP_SCALE, player.y // st.MINIMAP_SCALE
-        # Отрисовка персонажа
-        pg.draw.circle(self.minimap_screen, st.GREEN, (int(map_x), int(map_y)), 5)
+
         # Отрисовка лучей взгляда
-        pg.draw.line(self.minimap_screen, st.YELLOW, (map_x, map_y), (map_x + 12 * math.cos(player.angle),
-                                                               map_y + 12 * math.sin(player.angle)), 2)
+        pg.draw.line(self.minimap_screen, st.RED, (map_x, map_y), (map_x + 12 * math.cos(player.angle),
+                                                                      map_y + 12 * math.sin(player.angle)), 2)
+        # Отрисовка персонажа
+        pg.draw.circle(self.minimap_screen, st.YELLOW, (int(map_x), int(map_y)), 5)
         # Отрисовка стен
         for x, y, in mini_game_map:
             pg.draw.rect(self.minimap_screen, st.GREEN, (x, y, st.MINIMAP_TILE, st.MINIMAP_TILE))

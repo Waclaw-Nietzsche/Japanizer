@@ -23,7 +23,7 @@ if __name__ == '__main__':
         screen.fill(st.BLACK)
 
         # Отрисовка "Неба и Земли"
-        drawing.background()
+        drawing.background(player.angle)
 
         # Имитация отрисовки лучей (псевдо 3Д)
         drawing.world(player.position, player.angle)
