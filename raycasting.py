@@ -31,7 +31,7 @@ def corner(a,b):
     return (a // st.TILE_SIZE) * st.TILE_SIZE, (b // st.TILE_SIZE) * st.TILE_SIZE
 
 # Алгоритм Брезенхэма
-def ray_casting(screen, player_position, player_angle, texture):
+def ray_casting(screen, player_position, player_angle, textures):
     x0, y0 = player_position
     # Левый верхний угол текущего квадрата
     xm, ym = corner(x0,y0)
@@ -47,7 +47,9 @@ def ray_casting(screen, player_position, player_angle, texture):
         for i in range(0, st.WINDOW_WIDTH, st.TILE_SIZE):
             depth_vertical = (x - x0) / cos_angle
             yv = y0 + depth_vertical * sin_angle
-            if corner(x + dx, yv) in game_world_map:
+            tile_v = corner(x + dx, yv)
+            if tile_v in game_world_map:
+                texture_v = game_world_map[tile_v]
                 break
             x += dx * st.TILE_SIZE
 
@@ -59,12 +61,14 @@ def ray_casting(screen, player_position, player_angle, texture):
         for i in range(0, st.WINDOW_HEIGHT, st.TILE_SIZE):
             depth_horizontal = (y - y0) / sin_angle
             xh = x0 + depth_horizontal * cos_angle
-            if corner(xh, y + dy) in game_world_map:
+            tile_h = corner(xh, y + dy)
+            if tile_h in game_world_map:
+                texture_h = game_world_map[tile_h]
                 break
             y += dy * st.TILE_SIZE
 
         # Проекция
-        depth, offset = (depth_vertical, yv) if depth_vertical < depth_horizontal else (depth_horizontal, xh)
+        depth, offset, texture = (depth_vertical, yv, texture_v) if depth_vertical < depth_horizontal else (depth_horizontal, xh, texture_h)
         offset = int(offset) % st.TILE_SIZE
         # Убираем эффект рыбьего глаза (выпуклых стен)
         depth *= math.cos(player_angle - current_angle)
@@ -78,7 +82,7 @@ def ray_casting(screen, player_position, player_angle, texture):
         #                             st.SCALE_OF_VIEW,
         #                             projection_height))
 
-        wall_column = texture.subsurface(offset * st.TEXTURE_SCALE, 0,
+        wall_column = textures[texture].subsurface(offset * st.TEXTURE_SCALE, 0,
                                          st.TEXTURE_SCALE, st.TEXTURE_HEIGHT)
         wall_column = pg.transform.scale(wall_column, (st.SCALE_OF_VIEW, projection_height))
         screen.blit(wall_column, (ray * st.SCALE_OF_VIEW, st.HALF_WINDOW_HEIGHT - projection_height // 2))

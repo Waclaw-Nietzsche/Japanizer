@@ -10,14 +10,19 @@ class Draw:
         self.screen = screen
         self.minimap_screen = minimap_screen
         self.font = pg.font.SysFont('dejavusans',36,bold=True)
-        self.texture = pg.image.load('textures/wood.png').convert()
+        self.textures = \
+            {
+            '1': pg.image.load('textures/wood.png').convert(),
+            '2': pg.image.load('textures/floor.png').convert()
+            }
+
     def background(self):
         # Отрисовка "Неба и Земли"
         pg.draw.rect(self.screen, st.SKYBLUE, (0, 0, st.WINDOW_WIDTH, st.HALF_WINDOW_HEIGHT))
         pg.draw.rect(self.screen, st.DARKGRAY, (0, st.HALF_WINDOW_HEIGHT, st.WINDOW_WIDTH, st.HALF_WINDOW_HEIGHT))
 
     def world(self, player_position, player_angle):
-        ray_casting(self.screen, player_position, player_angle, self.texture)
+        ray_casting(self.screen, player_position, player_angle, self.textures)
 
     def framerate(self, clock):
         fps = str(int(clock.get_fps()))
